@@ -1,8 +1,10 @@
 'use client'
+import { AppContext } from '../contexts/AppContext';
 import auth from '../lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import toast from 'react-hot-toast';
 
 function SignInComponent() {
@@ -10,6 +12,7 @@ function SignInComponent() {
     const [password,setPassword] = useState('');
     const [showPreview, setShowPreview] = useState(false);
     const router = useRouter()
+    const {user,setUser} = useContext(AppContext)
 
 
     const handleTogglePreview = () => {
@@ -21,6 +24,7 @@ function SignInComponent() {
           await signInWithEmailAndPassword(auth,emailAddress,password)
           .then(async(userCredential)=>{
            console.log(userCredential)
+           setUser(userCredential.user);
            router.push('/dashboard')
           }).catch((error)=>{
           console.log(error)
@@ -77,7 +81,7 @@ function SignInComponent() {
         className='p-3 text-[.8rem] mt-4 rounded-md text-white mx-auto bg-[black]'>
             Sign in
         </button>
-        
+        <p className='text-white w-full text-sm text-center mt-3'>Don't have an account? <Link  className='hover:underline' href='/signup'>Sign Up</Link></p>
     </div>
   )
 }

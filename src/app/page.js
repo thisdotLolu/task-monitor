@@ -1,11 +1,16 @@
 'use client'
+import { AppContext } from "../contexts/AppContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 export default function Home() {
   const router = useRouter()
+  const {user,setUser} = useContext(AppContext)
+
   useEffect(()=>{
-    router.push('/dashboard')
+    if(!user){
+      router.push('/signup')
+    }  
   },[])
 
   return (

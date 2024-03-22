@@ -1,11 +1,13 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import SelectComponent from './SelectComponent';
 import { GoogleAuthProvider, createUserWithEmailAndPassword,sendEmailVerification, signInWithPopup } from 'firebase/auth';
 import auth, { db, provider } from '../lib/firebase';
 import { useRouter } from 'next/navigation';
 import { doc, setDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
+import { AppContext } from '../contexts/AppContext';
+import Link from 'next/link';
 
 
 const roles = [
@@ -23,6 +25,7 @@ function SignUpComponent() {
     const [confirmPassword,setConfirmPassword] = useState('');
     const [showPreview, setShowPreview] = useState(false);
     const router = useRouter()
+    const {user,setUser} = useContext(AppContext);
 
 
     const handleTogglePreview = () => {
@@ -39,6 +42,7 @@ function SignUpComponent() {
                 emailAddress,
                 role
              });
+             setUser(userCredential.user);
              router.push('/dashboard')
           }).catch((error)=>{
           console.log(error)
@@ -132,7 +136,7 @@ function SignUpComponent() {
         className='p-3 text-[.8rem] mt-4 rounded-md text-white mx-auto bg-[black]'>
             Create Account
         </button>
-        
+        <p className='text-white w-full text-sm text-center mt-3'>Already have an account? <Link className='hover:underline' href='/signin'>Sign in</Link></p>
     </div>
   )
 }
