@@ -5,6 +5,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword,sendEmailVerificatio
 import auth, { db, provider } from '../lib/firebase';
 import { useRouter } from 'next/navigation';
 import { doc, setDoc } from 'firebase/firestore';
+import toast from 'react-hot-toast';
 
 
 const roles = [
@@ -13,7 +14,6 @@ const roles = [
     {listItem:'Central Officer'},
     {listItem:'District Engineering Officer'},
 ]
-
 
 function SignUpComponent() {
     const [fullName,setFullName] = useState('');
@@ -39,12 +39,14 @@ function SignUpComponent() {
                 emailAddress,
                 role
              });
-             router.push('/')
+             router.push('/dashboard')
           }).catch((error)=>{
           console.log(error)
+          toast.error('Cannot sign up')
           })
         }        
-        catch(error){
+        catch(error){  
+        toast.error('Cannot sign up')
           throw Error (error, 'could not log user in')
         }
       }
@@ -63,6 +65,7 @@ function SignUpComponent() {
             placeholder='Enter full name'
             className='border bg-transparent p-2 rounded-md w-full placeholder:text-[.8rem] text-white mb-5'
             />
+            {/* {!fullName && <p className='text-[.6rem] text-red-600'>required field</p>} */}
         </label>
         <label htmlFor="email"
         className='my-4'
